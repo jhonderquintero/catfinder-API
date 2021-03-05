@@ -13,20 +13,20 @@
     Client ID = 890895167918-o17h2hmpatre78rjjd11o0rocf67pk53.apps.googleusercontent.com
     Client Secret = U17z_55tbQwdNOPHohhBFRm0
 */
-import {Router} from 'express'; 
-import {userLogin, newUser, userRegistration} from '../controllers/auth';
-import {check} from 'express-validator';
+import {userLogin, newUser, userRegistration, userLogout} from '../controllers/auth';
 import { validateErrors } from '../middlewares/validateErrors';
+import {check} from 'express-validator';
+import {Router} from 'express'; 
 
 const router : Router = Router();
 
 // {url}/api/auth (body.email, body.password)
 router.post('/', 
-[   //middlewares // LOGIN
+[   //middlewares // USER LOGIN
     check('email', 'Email is necessary').isEmail().not().isEmpty(),
     check('password', 'Password must have 6 characters').isLength({ min: 6 }),
     validateErrors
-],userLogin);
+], userLogin);
 
 // {url}/api/auth/new (body.givenName, body.familyName, body.email, body.password);
 router.post('/google/login',
@@ -34,7 +34,6 @@ router.post('/google/login',
     check('givenName', 'Name is necessary').not().isEmpty(),
     check('familyName', 'Family name is necessary').not().isEmpty(),
     check('email', 'Email is necessary').isEmail(),
-    check('password', 'Password is necessary').not().isEmpty(),
     check('googleId', 'Google ID is necessary').not().isEmpty(),
     validateErrors
 ], newUser);
@@ -46,6 +45,12 @@ router.post('/register',
     check('email', 'Email is necessary').isEmail(),
     check('password', 'Password is necessary').not().isEmpty(),
     validateErrors
-],userRegistration);
+], userRegistration);
+
+router.put('/logout',
+[   //middlewares // USER LOGOUT
+    check('token', 'Token is necessary').not().isEmpty(),
+    validateErrors
+], userLogout);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-import express, {Application, Response, Request, NextFunction} from 'express';
+import express, {Application} from 'express';
 import dbConnection from './database/config';
 import dotenv from 'dotenv';
 import morgan from 'morgan';

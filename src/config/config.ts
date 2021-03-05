@@ -13,5 +13,3 @@ process.env.URL_DB = urlDB;
 // JSON WEB TOKEN
 process.env.TOKEN_TIME = String(60 * 60);
 process.env.JWT_SECRET = process.env.JWT_SECRET || 'secret_key';
-
-// API INFORMATION

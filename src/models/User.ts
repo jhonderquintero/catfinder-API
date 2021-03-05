@@ -9,6 +9,7 @@ export interface UserInterface extends mongoose.Document{
     password: string;
     googleId: string;
     token: string;
+    fav_img: object[];
     online: boolean;
 };
 
@@ -25,14 +26,14 @@ export const UserSchema: Schema = new Schema({
     },
     password: {
         type: String,
-        required: true
+        required: false
     },
     googleId: {
         type: String,
-        unique: true,
         required: false,
     },
     token: String,
+    fav_img: Object,
     online: Boolean
 });
 

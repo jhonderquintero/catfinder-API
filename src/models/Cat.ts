@@ -1,7 +1,4 @@
-const uniqueValidator = require('mongoose-unique-validator');
 import mongoose, {Schema, model} from 'mongoose';
-
-// Random img https://api.thecatapi.com/v1/images/search?category_ids=ID_CATEGORY
 
 enum category {
     hats = 1, 
@@ -22,7 +19,7 @@ export interface CatInterface extends mongoose.Document{
     id_name: string,
     width: number,
     height: number,
-    img_url: string
+    img_url: string[10],
 };
 
 export const CatSchema: Schema = new Schema({
@@ -30,7 +27,7 @@ export const CatSchema: Schema = new Schema({
     id_name: String,
     width: Number,
     height: Number,
-    img_url: String
+    img_url: Array,
 });
 
 const Cat =  model<CatInterface>('Cat', CatSchema);

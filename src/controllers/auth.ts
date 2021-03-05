@@ -36,47 +36,61 @@ const userLogin = (req: Request , res:Response) => {
         userFind.token = token;
 
         userFind.save((err:object, updatedUser:object) => {
-            if (err) res.status(400).json(err);
+            if (err) return res.status(400).json(err);
             else {
-                res.json({
+                return res.json({
                     ok: true,
                     user: updatedUser
                 });
             };
         });
-
-        // res.status(200).json({
-        //     ok: true,
-        //     msg: 'Validation success',
-        //     user: userFind,
-        //     token
-        // });
     });
 };
 
-const newUser = (req: Request, res:Response) => {
-    const { givenName, lastName, email, password, googleId, online} = req.body;
+const newUser = (req: Request, res:Response) => { //google login
+    let body = req.body;
+
+    let user = new User({
+        givenName: req.body.givenName,
+        familyName: req.body.familyName,
+        email: body.email,
+        googleId: req.body.googleId,
+        online: true,
+    });
+
+    user.save((err, newUser) => {
+        if (err) {
+            return res.status(400).json({ ok: false, msg: 'Error saving in DB', err });
+        }else {
+            return res.json({
+                ok: true,
+                user: newUser
+            });
+        };
+    });
+};
+
+const userRegistration = (req: Request, res: Response) => {
+
+    const { givenName, familyName, email, password} = req.body;
 
     const saltRounds = 10;
     bcrypt.genSalt(saltRounds, function (err, salt) {
         
-        if (err) res.status(400).send(err); 
+        if (err) return res.status(400).send(err); 
         
         bcrypt.hash(password, salt, function(err, hash) { 
-            if (err) res.status(400).send(err);
+            if (err) return res.status(400).send(err);
             
             let newUser = new User({
                 givenName,
-                lastName,
+                familyName,
                 email,
-                googleId,
                 password: hash,
-                online
             });
 
             newUser.save((err, newUserDB)=>{
-                if(err) res.status(400).send(err);
-
+                if(err) return res.status(400).send(err);
                 res.status(201).json({
                     ok: true,
                     msg: 'new user created',
@@ -87,30 +101,38 @@ const newUser = (req: Request, res:Response) => {
     });
 };
 
-const userRegistration = (req: Request, res: Response) => {
-    let body = req.body;
+const userLogout = (req: Request, res: Response) => {
+    let { token } = req.body;
 
-    let user = new User({
-        givenName: req.body.givenName,
-        familyName: req.body.familyName,
-        email: body.email,
-        password: bcrypt.hashSync(body.password, 10),
-        online: true,
-    });
+    if (!token) {
+        return res.status(400).json({
+            ok: false,
+            token: 'Invalid Token'
+        });
+    };
 
-    user.save((err, newUser) => {
-        if (err) res.status(400).json(err);
-        else {
-            res.json({
-                ok: true,
-                user: newUser
-            });
-        };
+    User.findOne({ token }, (err: object, userFind: any) => {
+        if (err) return res.status(400).json({ ok: false, err });
+        if (!userFind) return res.status(400).json({ ok: false, err: 'Invalid Token' });
+
+        userFind.token = 'null';
+        userFind.online = false;
+        
+        userFind.save((err: object, updatedUser: object) => {
+            if (err) return res.status(400).json(err);
+            else {
+                return res.json({
+                    ok: true,
+                    user: updatedUser
+                });
+            };
+        });
     });
 };
 
 export {
     userLogin,
     newUser,
-    userRegistration
-}
+    userLogout,
+    userRegistration,
+};

@@ -1,8 +1,12 @@
-import Cat from '../models/Cat';
-import axios from 'axios';
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const Cat_1 = __importDefault(require("../models/Cat"));
+const axios_1 = __importDefault(require("axios"));
 const databaseCreation = () => {
-    axios({
+    axios_1.default({
         method: 'GET',
         url: 'https://api.thecatapi.com/v1/categories'
     }).then(res => {
@@ -12,9 +16,8 @@ const databaseCreation = () => {
         }
     }).catch(err => console.log(err));
 };
-
-const getData = (id: number, limit:number) => {
-    axios({
+const getData = (id, limit) => {
+    axios_1.default({
         method: 'GET',
         url: 'https://api.thecatapi.com/v1/images/search',
         params: {
@@ -22,7 +25,6 @@ const getData = (id: number, limit:number) => {
             category_ids: id
         }
     }).then((response) => {
-
         for (let index = 0; index < response.data.length; index++) {
             let { categories, url: img_url, width, height } = response.data[index];
             let { id: category_id, name: id_name } = categories[0];
@@ -31,20 +33,18 @@ const getData = (id: number, limit:number) => {
         }
     }).catch(err => console.log(err));
 };
-
-const insertDocument = (category_id: number, id_name:string, width: number, height: number, img_url: string) => {
-    let newCat = new Cat({
+const insertDocument = (category_id, id_name, width, height, img_url) => {
+    let newCat = new Cat_1.default({
         category_id,
         id_name,
         width,
         height,
         img_url
     });
-    
-    newCat.save((err, newUserDB)=>{
-        if(err) console.log(err)
+    newCat.save((err, newUserDB) => {
+        if (err)
+            console.log(err);
         console.log(newUserDB);
     });
 };
-
-export default databaseCreation;
+exports.default = databaseCreation;
