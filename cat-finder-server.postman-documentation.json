@@ -1,0 +1,246 @@
+{
+	"info": {
+		"_postman_id": "b9841669-d0d6-44a5-b03e-45df3e1c45c4",
+		"name": "cat-finder-server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ALL CATS",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{url}}/api/cats/?from=0&limit=10",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"cats",
+						""
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						}
+					]
+				},
+				"description": "This endpoint returns details about multiple cats. Data could be filtered by query params specified."
+			},
+			"response": []
+		},
+		{
+			"name": "FILTER CATS DATA",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/cats/category?from=0&limit=10&category_id=1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"cats",
+						"category"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "category_id",
+							"value": "1"
+						}
+					]
+				},
+				"description": "This endpoint returns information about different data specified by categories.\r\n\r\nCategories:     \r\n    hats = 1, \r\n    space = 2,\r\n    sunglasses = 4,\r\n    boxes = 5,\r\n    ties = 7,\r\n    sinks = 14,\r\n    clothes = 15,"
+			},
+			"response": []
+		},
+		{
+			"name": "USER LOGIN",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "user_email@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "secret_password@gmail.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/auth",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"auth"
+					]
+				},
+				"description": "User login. You can use this after you have a registered user."
+			},
+			"response": []
+		},
+		{
+			"name": "USER REGISTRATION",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "givenName",
+							"value": "Name",
+							"type": "text"
+						},
+						{
+							"key": "familyName",
+							"value": "Family Name",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "emailuser@mail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "secret_password",
+							"type": "text"
+						},
+						{
+							"key": "googleId",
+							"value": "asdsad",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/auth/register",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				},
+				"description": "Create a new user with your unique ID and information, that allows complete access to the database."
+			},
+			"response": []
+		},
+		{
+			"name": "USER LOGIN/REGISTRATION WITH GOOGLE",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "givenName",
+							"value": "Name",
+							"type": "text"
+						},
+						{
+							"key": "familyName",
+							"value": "Family Name",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "emailuser@mail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "secret_password",
+							"type": "text"
+						},
+						{
+							"key": "googleId",
+							"value": "googleID",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/auth/google/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"google",
+						"login"
+					]
+				},
+				"description": "Login / Registrate with google OAuth. "
+			},
+			"response": []
+		},
+		{
+			"name": "USER LOGOUT",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "token_code",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/auth/logout",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"logout"
+					]
+				},
+				"description": "Logout sending your token."
+			},
+			"response": []
+		}
+	]
+}
