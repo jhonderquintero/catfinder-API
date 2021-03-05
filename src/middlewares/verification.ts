@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import {Response, Request, NextFunction } from 'express';
 
 export interface ExtendedRequest extends Request { // extends interface to admit request
-    user: string
+    user: any
 };
 
 let tokenVerification = (req:ExtendedRequest, res:Response, next:NextFunction) =>{
@@ -19,6 +19,5 @@ let tokenVerification = (req:ExtendedRequest, res:Response, next:NextFunction) =
         next();
     });         
 };
-
 
 export default tokenVerification;

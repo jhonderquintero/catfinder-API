@@ -3,15 +3,18 @@ import mongoose, {Schema, model} from 'mongoose';
 import isEmail from 'validator/lib/isEmail';
 
 export interface UserInterface extends mongoose.Document{
-    name: string;
+    givenName: string;
+    familyName: string;
     email: string;
     password: string;
     googleId: string;
+    token: string;
     online: boolean;
 };
 
 export const UserSchema: Schema = new Schema({
-    name: String,
+    givenName: String,
+    familyName: String,
     email: {
         type: String,
         unique: true,
@@ -27,8 +30,9 @@ export const UserSchema: Schema = new Schema({
     googleId: {
         type: String,
         unique: true,
-        required: true,
+        required: false,
     },
+    token: String,
     online: Boolean
 });
 

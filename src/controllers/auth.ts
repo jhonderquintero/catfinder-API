@@ -27,24 +27,35 @@ const userLogin = (req: Request , res:Response) => {
             });
         };
         
-        // All good
-        
         let token = jwt.sign({
             user: userFind},
             String(process.env.JWT_SECRET),
-            {expiresIn: process.env.TOKEN_TIME});
+            { expiresIn: process.env.TOKEN_TIME });
+        
+        userFind.online = true;
+        userFind.token = token;
 
-        res.status(200).json({
-            ok: true,
-            msg: 'Validation success',
-            user: userFind,
-            token
+        userFind.save((err:object, updatedUser:object) => {
+            if (err) res.status(400).json(err);
+            else {
+                res.json({
+                    ok: true,
+                    user: updatedUser
+                });
+            };
         });
+
+        // res.status(200).json({
+        //     ok: true,
+        //     msg: 'Validation success',
+        //     user: userFind,
+        //     token
+        // });
     });
 };
 
 const newUser = (req: Request, res:Response) => {
-    const { name, email, password, googleId, imageUrl, online} = req.body;
+    const { givenName, lastName, email, password, googleId, online} = req.body;
 
     const saltRounds = 10;
     bcrypt.genSalt(saltRounds, function (err, salt) {
@@ -55,10 +66,11 @@ const newUser = (req: Request, res:Response) => {
             if (err) res.status(400).send(err);
             
             let newUser = new User({
-                name,
+                givenName,
+                lastName,
                 email,
-                password: hash,
                 googleId,
+                password: hash,
                 online
             });
 
@@ -75,15 +87,30 @@ const newUser = (req: Request, res:Response) => {
     });
 };
 
-const tokenRevalidate = (req: Request, res:Response) : void => {
-    res.json({
-        ok: true,
-        msg: 'renew'
+const userRegistration = (req: Request, res: Response) => {
+    let body = req.body;
+
+    let user = new User({
+        givenName: req.body.givenName,
+        familyName: req.body.familyName,
+        email: body.email,
+        password: bcrypt.hashSync(body.password, 10),
+        online: true,
+    });
+
+    user.save((err, newUser) => {
+        if (err) res.status(400).json(err);
+        else {
+            res.json({
+                ok: true,
+                user: newUser
+            });
+        };
     });
 };
 
 export {
     userLogin,
     newUser,
-    tokenRevalidate
+    userRegistration
 }
