@@ -12,7 +12,7 @@ const userLogin = (req: Request , res:Response) => {
         });
 
         if(!userFind){
-            return res.status(400).json({
+            return res.status(404).json({
                 err: {
                     message: 'User or password incorrect, please try again'
                 }
@@ -20,7 +20,8 @@ const userLogin = (req: Request , res:Response) => {
         };
 
         if (!bcrypt.compareSync(password, userFind.password)){
-            return res.status(400).json({
+            return res.status(500).json({
+                ok:false,
                 err: {
                     message: 'User or password incorrect, please try again'
                 }
@@ -36,7 +37,7 @@ const userLogin = (req: Request , res:Response) => {
         userFind.token = token;
 
         userFind.save((err:object, updatedUser:object) => {
-            if (err) return res.status(400).json(err);
+            if (err) return res.status(500).json({ok:false, err});
             else {
                 return res.json({
                     ok: true,
@@ -60,9 +61,9 @@ const newUser = (req: Request, res:Response) => { //google login
 
     user.save((err, newUser) => {
         if (err) {
-            return res.status(400).json({ ok: false, msg: 'Error saving in DB', err });
+            return res.status(500).json({ ok: false, msg: 'Error saving in DB', err });
         }else {
-            return res.json({
+            return res.status(201).json({
                 ok: true,
                 user: newUser
             });
@@ -77,10 +78,10 @@ const userRegistration = (req: Request, res: Response) => {
     const saltRounds = 10;
     bcrypt.genSalt(saltRounds, function (err, salt) {
         
-        if (err) return res.status(400).send(err); 
+        if (err) return res.status(400).json({ok:false, err});
         
         bcrypt.hash(password, salt, function(err, hash) { 
-            if (err) return res.status(400).send(err);
+            if (err) return res.status(400).json({ok:false, err});
             
             let newUser = new User({
                 givenName,
@@ -90,10 +91,10 @@ const userRegistration = (req: Request, res: Response) => {
             });
 
             newUser.save((err, newUserDB)=>{
-                if(err) return res.status(400).send(err);
+                if (err) return res.status(500).json({ok:false, err});
                 res.status(201).json({
                     ok: true,
-                    msg: 'new user created',
+                    msg: 'New user created',
                     user: newUserDB
                 });
             });
@@ -105,21 +106,21 @@ const userLogout = (req: Request, res: Response) => {
     let { token } = req.body;
 
     if (!token) {
-        return res.status(400).json({
+        return res.status(404).json({
             ok: false,
-            token: 'Invalid Token'
+            token: 'Not Found'
         });
     };
 
     User.findOne({ token }, (err: object, userFind: any) => {
         if (err) return res.status(400).json({ ok: false, err });
-        if (!userFind) return res.status(400).json({ ok: false, err: 'Invalid Token' });
+        if (!userFind) return res.status(404).json({ ok: false, err: 'Not Found'});
 
         userFind.token = 'null';
         userFind.online = false;
         
         userFind.save((err: object, updatedUser: object) => {
-            if (err) return res.status(400).json(err);
+            if (err) return res.status(500).json(err);
             else {
                 return res.json({
                     ok: true,

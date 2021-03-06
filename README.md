@@ -1,5 +1,6 @@
 # catfinder-API
-https://documenter.getpostman.com/view/13313612/Tz5jefSE (API DOCUMENTATION)
+
+<https://documenter.getpostman.com/view/13313612/Tz5jefSE> (API DOCUMENTATION)
 
 ## Table of contents
 
@@ -18,7 +19,7 @@ Project is created with:
 * MERN STACK (BACKEND)
 * MongoDB w mongoose
 * Node.js w Typescript
-* Express 
+* Express
 * Encryption with bcrypt
 * Layer of security with JSON-WEB-TOKEN
 * Validations with express-validator and mongoose-unique-validator.

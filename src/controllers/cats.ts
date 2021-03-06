@@ -39,7 +39,7 @@ const filterCats = async (req: Request, res: Response): Promise<any> => {
     });
 
     if (!cats) {
-        return res.status(400).json({
+        return res.status(404).json({
             ok: false,
             cats: 'There are no cats in DB'
         });
@@ -53,7 +53,7 @@ const filterCats = async (req: Request, res: Response): Promise<any> => {
 
 const AddFavoriteElement = async (req: Request, res: Response) => {
     const cat: any = await Cat.findOne({ img_url: String(req.query.img_url) }).catch((err) => {
-        return res.json({
+        return res.status(500).json({
             ok: false,
             err
         });
@@ -62,7 +62,7 @@ const AddFavoriteElement = async (req: Request, res: Response) => {
     if (!cat) return res.json({ok: false, msg: 'Cat image not found in DB'});
 
     const user: any = await User.findOne({token: String(req.query.token)}).catch((err) => {
-        return res.json({
+        return res.status(500).json({
             ok: false,
             err
         });
@@ -74,7 +74,7 @@ const AddFavoriteElement = async (req: Request, res: Response) => {
         user.fav_img = [req.query.img_url];
     } else {
         if (user.fav_img.length >= 10) {
-            res.json({
+            res.status(401).json({
                 ok: false,
                 msg: 'Favorite image storage full. Delete some image to insert another.'
             });
@@ -83,9 +83,9 @@ const AddFavoriteElement = async (req: Request, res: Response) => {
     };
 
     user.save((err: object, updatedUser: object) => {
-        if (err) res.status(400).json(err);
+        if (err) res.status(500).json({ok: false, err});
         else {
-            res.json({
+            res.status(200).json({
                 ok: true,
                 user: updatedUser
             });
