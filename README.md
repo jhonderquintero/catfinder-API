@@ -9,8 +9,7 @@ https://documenter.getpostman.com/view/13313612/Tz5jefSE (API DOCUMENTATION)
 
 ## General info
 
-This project is a SPA (SINGLE PAGE APPLICATION) developed in React.js library.  
-This page applied good practices in design, such as responsive, first mobile and Material design.  
+This project is a REST API developed with Node.js w Typescript, Express and MongoDB.
 
 ## Technologies
 
