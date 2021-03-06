@@ -8,6 +8,7 @@ const databaseCreation = () => {
     }).then(res => {
         for (let index = 0; index < res.data.length; index++) {
             let { id } = res.data[index];
+            console.log(id);
             getData(id, 100); //OBTAIN 100 elements from each category
         }
     }).catch(err => console.log(err));
@@ -26,8 +27,8 @@ const getData = (id: number, limit:number) => {
         for (let index = 0; index < response.data.length; index++) {
             let { categories, url: img_url, width, height } = response.data[index];
             let { id: category_id, name: id_name } = categories[0];
+            console.log(img_url, id_name);
             insertDocument(category_id, id_name, width, height, img_url);
-            console.log(category_id, id_name, width, height, img_url, 'INSERTED');
         }
     }).catch(err => console.log(err));
 };

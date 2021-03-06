@@ -7,7 +7,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 // DB CONNECTION
 let urlDB;
 if(process.env.NODE_ENV === 'dev') urlDB = 'mongodb://localhost:27017/catfinderDB';
-else  urlDB = 'mongodb+srv://catfinder_user:P3wTUjkqPafO7qFJ@cluster0.h8aqc.mongodb.net/catfinderDB';
+else  urlDB = 'mongodb+srv://<USER>:<KEY>.mongodb.net/catfinderDB';
 process.env.URL_DB = urlDB;
 
 // JSON WEB TOKEN
