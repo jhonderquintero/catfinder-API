@@ -29,7 +29,7 @@ Project is created with:
 To run this project, first install it locally using npm:
 
 ```git
-$npm clone https://github.com/jhonderquintero/heroes-app.git
+$npm clone https://github.com/jhonderquintero/catfinder-API.git
 $npm install
 ```
 
