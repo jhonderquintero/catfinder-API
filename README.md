@@ -37,7 +37,7 @@ create your database with the same, first compile ts to js:
 
 ```git
 $npm run build // This create a file "dist" with all the code compile in js
-$npm run create-db //This command full with cats data your database (before initializated with mongo)
+$npm run create-db //This command full the database with cats data (before initializated with mongo)
 $npm run start // Create your server
 ```
 
