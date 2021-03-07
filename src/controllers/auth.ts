@@ -7,13 +7,15 @@ const userLogin = (req: Request , res:Response) => {
     const {email, password } = req.body;
 
     User.findOne({email}, (err:object, userFind: any) => {
-        if(err) return res.status(500).json({
+        if (err) return res.status(500).json({
+            ok: false,
             err
         });
 
         if(!userFind){
             return res.status(404).json({
                 err: {
+                    ok: false,
                     message: 'User or password incorrect, please try again'
                 }
             });
@@ -50,24 +52,63 @@ const userLogin = (req: Request , res:Response) => {
 
 const newUser = (req: Request, res:Response) => { //google login
     let body = req.body;
+    let email = req.body.email;
 
-    let user = new User({
-        givenName: req.body.givenName,
-        familyName: req.body.familyName,
-        email: body.email,
-        googleId: req.body.googleId,
-        online: true,
-    });
+    User.findOne({email}, (err:object, userFind: any) => {
+        if (err) return res.status(500).json({
+            ok: false,
+            err
+        });
 
-    user.save((err, newUser) => {
-        if (err) {
-            return res.status(500).json({ ok: false, msg: 'Error saving in DB', err });
-        }else {
-            return res.status(201).json({
-                ok: true,
-                user: newUser
+        if(!userFind){
+            let user = new User({
+                givenName: req.body.givenName,
+                familyName: req.body.familyName,
+                email: body.email,
+                googleId: req.body.googleId,
+                online: true,
+            });
+
+            let token = jwt.sign({
+                user},
+                String(process.env.JWT_SECRET),
+                { expiresIn: process.env.TOKEN_TIME });
+            
+            user.token = token;
+        
+            user.save((err, newUser) => {
+                if (err) {
+                    return res.status(500).json({ ok: false, msg: 'Error saving in DB', err });
+                }else {
+                    return res.status(201).json({
+                        ok: true,
+                        user: newUser
+                    });
+                };
             });
         };
+
+        let token = jwt.sign({
+            user: userFind},
+            String(process.env.JWT_SECRET),
+            { expiresIn: process.env.TOKEN_TIME });
+
+        userFind.givenName = req.body.givenName;
+        userFind.familyName = req.body.familyName;
+        userFind.email = body.email;
+        userFind.googleId = req.body.googleId;
+        userFind.token = token;
+        userFind.online = true;
+
+        userFind.save((err:object, updatedUser:object) => {
+            if (err) return res.status(500).json({ok:false, err});
+            else {
+                return res.status(201).json({
+                    ok: true,
+                    user: updatedUser
+                });
+            };
+        });
     });
 };
 
